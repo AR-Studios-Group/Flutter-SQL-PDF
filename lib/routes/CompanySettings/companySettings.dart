@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../controllers/companyDataController.dart';
 
 class CompanySettings extends StatelessWidget {
-  final companyDataController = Get.put(CompanyDataController());
+  final CompanyDataController companyDataController = Get.find();
   final nameController = TextEditingController();
   final addressController = TextEditingController();
   final logoController = TextEditingController();
@@ -48,11 +48,11 @@ class CompanySettings extends StatelessWidget {
                   width: 50, height: 50)
               : Container()),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: TextFormField(
               controller: nameController,
               decoration: InputDecoration(
-                border: UnderlineInputBorder(),
+                border: const UnderlineInputBorder(),
                 labelText: companyDataController.name.value,
               ),
             ),
@@ -61,9 +61,9 @@ class CompanySettings extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: TextFormField(
               controller: addressController,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Address',
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
+                labelText: companyDataController.address.value,
               ),
             ),
           ),

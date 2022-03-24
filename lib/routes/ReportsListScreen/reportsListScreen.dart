@@ -6,7 +6,7 @@ import '../../views/ReportCard.dart';
 import 'NewReportScreen/NewReportScreen.dart';
 
 class ReportListScreen extends StatelessWidget {
-  final reportDBController = Get.put(ReportDBController());
+  final ReportDBController reportDBController = Get.find();
 
   ReportListScreen({Key? key}) : super(key: key);
 
