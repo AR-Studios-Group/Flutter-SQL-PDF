@@ -41,6 +41,7 @@ dependencies:
   pdf: ^3.7.3
   printing: ^5.7.4
   image_picker: ^0.8.4+11
+  flutter_full_pdf_viewer: ^1.0.6
 
 dev_dependencies:
   flutter_test:

@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 
 import '../controllers/reportDBController.dart';
 import '../models/report.dart';
+import '../routes/ReportsListScreen/PDFViewer/PDFViewer.dart';
 import '../utils/PDFGenerator.dart';
 
 class ReportCard extends StatefulWidget {
@@ -38,11 +40,18 @@ class _ReportCardState extends State<ReportCard> {
   void handlePDFCreation() async {
     try {
       if (!isPDFCreated) {
+        // Create PDF if it hasn't been created
         final pdf = await createPDF(widget.report);
         await savePDF(pdf, widget.report.userId);
         setState(() {
           isPDFCreated = true;
         });
+      } else {
+        // View PDF if it already exist
+        print('view pdf');
+        final path = (await getApplicationDocumentsDirectory()).path;
+        final fullPath = '${path}/${widget.report.userId}.pdf';
+        Get.to(PDFViewer(path: fullPath));
       }
     } catch (err) {
       print(err);
