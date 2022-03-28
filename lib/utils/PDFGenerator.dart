@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
@@ -7,13 +6,20 @@ import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../../controllers/companyDataController.dart';
-import '../../../models/report.dart';
+import '../controllers/companyDataController.dart';
+import '../models/report.dart';
 
 Future<Widget> Header() async {
   final CompanyDataController companyDataController = Get.find();
-  final logo = await networkImage(companyDataController.logo.value);
   final font = await PdfGoogleFonts.nunitoExtraLight();
+
+  late ImageProvider logo;
+  if (companyDataController.logo == '') {
+    logo =
+        MemoryImage(companyDataController.logoStorage.value.readAsBytesSync());
+  } else {
+    logo = await networkImage(companyDataController.logo.value);
+  }
 
   return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,25 +41,49 @@ Future<Widget> Header() async {
 }
 
 Future<Widget> Body(Report report) async {
+  final font = await PdfGoogleFonts.nunitoExtraLight();
+
   return Table(children: [
     TableRow(children: [
-      Text(
-        'Created On',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      Text('Alias', style: TextStyle(fontWeight: FontWeight.bold)),
-      Text('Device Name', style: TextStyle(fontWeight: FontWeight.bold)),
-      Text('Phone ID', style: TextStyle(fontWeight: FontWeight.bold)),
-      Text('User ID', style: TextStyle(fontWeight: FontWeight.bold)),
-      Text('Result', style: TextStyle(fontWeight: FontWeight.bold)),
+      Text('Created On',
+          style: TextStyle(
+            font: font,
+            fontSize: 14,
+          )),
+      Text('Alias',
+          style: TextStyle(
+            font: font,
+            fontSize: 14,
+          )),
+      Text('Device Name',
+          style: TextStyle(
+            font: font,
+            fontSize: 14,
+          )),
+      Text('Phone ID',
+          style: TextStyle(
+            font: font,
+            fontSize: 14,
+          )),
+      Text('User ID',
+          style: TextStyle(
+            font: font,
+            fontSize: 14,
+          )),
+      Text('Result',
+          style: TextStyle(
+            font: font,
+            fontSize: 14,
+          )),
     ]),
     TableRow(children: [
-      Text(report.create_date),
-      Text(report.alias),
-      Text(report.device_name),
-      Text(report.phoneId),
-      Text(report.userId),
-      Text(report.installation_result),
+      Text(report.create_date, style: TextStyle(font: font, fontSize: 14)),
+      Text(report.alias, style: TextStyle(font: font, fontSize: 14)),
+      Text(report.device_name, style: TextStyle(font: font, fontSize: 14)),
+      Text(report.phoneId, style: TextStyle(font: font, fontSize: 14)),
+      Text(report.userId, style: TextStyle(font: font, fontSize: 14)),
+      Text(report.installation_result,
+          style: TextStyle(font: font, fontSize: 14)),
     ])
   ]);
 }
@@ -76,18 +106,19 @@ Future<Document> createPDF(Report report) async {
         ]);
       }));
 
+  print('PDF Created');
+
   return pdf;
 }
 
-Future<bool> savePDF(Document pdf, String fileName) async {
+Future<void> savePDF(Document pdf, String fileName) async {
   try {
+    print('PDF Saveed');
     List<int> bytes = await pdf.save();
-    final path = (await getApplicationDocumentsDirectory()).path;
-    print(path);
+    final path = (await getApplicationSupportDirectory()).path;
     final file = File('$path/$fileName.pdf');
     await file.writeAsBytes(bytes);
-    return true;
   } catch (err) {
-    return false;
+    print(err);
   }
 }

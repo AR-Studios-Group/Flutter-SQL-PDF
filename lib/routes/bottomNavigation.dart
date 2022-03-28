@@ -51,7 +51,7 @@ class _BottomTabNavigationState extends State<BottomTabNavigation> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: _handleOnTap,
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blue,
         selectedItemColor: Colors.black,
       ),
     ));

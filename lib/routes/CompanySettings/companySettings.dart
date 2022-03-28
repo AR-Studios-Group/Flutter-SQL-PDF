@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../controllers/companyDataController.dart';
 
@@ -22,6 +25,7 @@ class CompanySettings extends StatelessWidget {
 
       if (logoController.text != '') {
         companyDataController.writeString('@logo', logoController.text);
+        companyDataController.writeString('@logo_photo', '');
       }
 
       nameController.text = '';
@@ -30,6 +34,10 @@ class CompanySettings extends StatelessWidget {
     } catch (err) {
       print(err);
     }
+  }
+
+  void _handlePickImageFromPhotos() {
+    companyDataController.pickImage();
   }
 
   @override
@@ -47,6 +55,13 @@ class CompanySettings extends StatelessWidget {
               ? Image.network(companyDataController.logo.value,
                   width: 50, height: 50)
               : Container()),
+          Obx(() => SizedBox(
+                width: 50,
+                height: 50,
+                child: companyDataController.logoStorage.value == File('')
+                    ? Container()
+                    : Image.file(companyDataController.logoStorage.value),
+              )),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: TextFormField(
@@ -77,6 +92,15 @@ class CompanySettings extends StatelessWidget {
               ),
             ),
           ),
+          TextButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.lightBlueAccent)),
+              onPressed: _handlePickImageFromPhotos,
+              child: const Text(
+                'Pick Image from Photos',
+                style: TextStyle(color: Colors.black),
+              )),
           TextButton(
               style: ButtonStyle(
                   backgroundColor:
