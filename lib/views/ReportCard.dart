@@ -22,7 +22,7 @@ class _ReportCardState extends State<ReportCard> {
 
   void initalLoad() async {
     try {
-      final path = (await getApplicationSupportDirectory()).path;
+      final path = (await getApplicationDocumentsDirectory()).path;
       final file = File('$path/${widget.report.userId}.pdf');
       List<int> bytes = await file.readAsBytes();
       if (bytes.isNotEmpty) {

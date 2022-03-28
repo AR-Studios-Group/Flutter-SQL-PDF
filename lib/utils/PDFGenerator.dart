@@ -113,11 +113,12 @@ Future<Document> createPDF(Report report) async {
 
 Future<void> savePDF(Document pdf, String fileName) async {
   try {
-    print('PDF Saveed');
+    print('PDF Saved');
     List<int> bytes = await pdf.save();
-    final path = (await getApplicationSupportDirectory()).path;
+    final path = (await getApplicationDocumentsDirectory()).path;
     final file = File('$path/$fileName.pdf');
     await file.writeAsBytes(bytes);
+    print('$path/$fileName.pdf');
   } catch (err) {
     print(err);
   }
