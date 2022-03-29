@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,14 +11,19 @@ class CompanyDataController extends GetxController {
   var name = ''.obs;
   var address = ''.obs;
   var logo = ''.obs;
-  var logoStorage = File('').obs;
+  var logoStorage = ''.obs; // Saved as base64
 
   void pickImage() async {
     try {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      logoStorage.value = File(image!.path);
-      writeString('@logo_photo', image.path);
-      writeString('@logo', '');
+      if (image != null) {
+        List<int> imageByte = File(image.path).readAsBytesSync();
+        String imageBase64 = base64Encode(imageByte);
+
+        writeString('@logo_photo', imageBase64);
+      } else {
+        logoStorage.value = '';
+      }
     } catch (err) {
       print(err);
     }
@@ -40,9 +46,13 @@ class CompanyDataController extends GetxController {
         break;
       case '@logo':
         logo.value = value;
+        logoStorage.value = '';
+        storage.write('@logo_photo', '');
         break;
       case '@logo_photo':
-        logoStorage.value = File(value);
+        logoStorage.value = value;
+        logo.value = '';
+        storage.write('@logo', '');
         break;
     }
   }
@@ -52,11 +62,11 @@ class CompanyDataController extends GetxController {
     var _address = readString('@address');
     var _logo = readString('@logo');
     var _logo_photo = readString('@logo_photo');
-
+    print(_logo);
     name.value = _name;
     address.value = _address;
     logo.value = _logo;
-    logoStorage.value = File(_logo_photo);
+    logoStorage.value = _logo_photo;
   }
 
   @override

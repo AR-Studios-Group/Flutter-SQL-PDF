@@ -6,7 +6,6 @@ import 'package:pdf/pdf.dart';
 
 import '../controllers/reportDBController.dart';
 import '../models/report.dart';
-import '../routes/ReportsListScreen/PDFViewer/PDFViewer.dart';
 import '../utils/PDFGenerator.dart';
 
 class ReportCard extends StatefulWidget {
@@ -49,9 +48,8 @@ class _ReportCardState extends State<ReportCard> {
       } else {
         // View PDF if it already exist
         print('view pdf');
-        final path = (await getApplicationDocumentsDirectory()).path;
+        final path = (await getApplicationSupportDirectory()).path;
         final fullPath = '${path}/${widget.report.userId}.pdf';
-        Get.to(PDFViewer(path: fullPath));
       }
     } catch (err) {
       print(err);

@@ -14,12 +14,6 @@ Future<Widget> Header() async {
   final font = await PdfGoogleFonts.nunitoExtraLight();
 
   late ImageProvider logo;
-  if (companyDataController.logo == '') {
-    logo =
-        MemoryImage(companyDataController.logoStorage.value.readAsBytesSync());
-  } else {
-    logo = await networkImage(companyDataController.logo.value);
-  }
 
   return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +21,7 @@ Future<Widget> Header() async {
       children: [
         Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: Image(logo, width: 50, height: 50)),
+            child: Container()),
         Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +109,7 @@ Future<void> savePDF(Document pdf, String fileName) async {
   try {
     print('PDF Saved');
     List<int> bytes = await pdf.save();
-    final path = (await getApplicationDocumentsDirectory()).path;
+    final path = (await getApplicationSupportDirectory()).path;
     final file = File('$path/$fileName.pdf');
     await file.writeAsBytes(bytes);
     print('$path/$fileName.pdf');

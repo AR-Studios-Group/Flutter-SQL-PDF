@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class CompanySettings extends StatelessWidget {
   final nameController = TextEditingController();
   final addressController = TextEditingController();
   final logoController = TextEditingController();
+
   CompanySettings({Key? key}) : super(key: key);
 
   void _handleUpdate() {
@@ -25,7 +27,6 @@ class CompanySettings extends StatelessWidget {
 
       if (logoController.text != '') {
         companyDataController.writeString('@logo', logoController.text);
-        companyDataController.writeString('@logo_photo', '');
       }
 
       nameController.text = '';
@@ -51,37 +52,38 @@ class CompanySettings extends StatelessWidget {
         children: [
           Obx(() => Text('Name: ${companyDataController.name.value}')),
           Obx(() => Text('Address: ${companyDataController.address.value}')),
-          Obx(() => companyDataController.logo.value.contains('jpg')
-              ? Image.network(companyDataController.logo.value,
-                  width: 50, height: 50)
-              : Container()),
-          Obx(() => SizedBox(
-                width: 50,
-                height: 50,
-                child: companyDataController.logoStorage.value == File('')
-                    ? Container()
-                    : Image.file(companyDataController.logoStorage.value),
+          Obx(() => companyDataController.logo.value == ''
+              ? Container()
+              : Image.network(companyDataController.logo.value,
+                  width: 50, height: 50)),
+          Obx(
+            () => companyDataController.logoStorage.value == ''
+                ? Container()
+                : Image.memory(
+                    base64Decode(companyDataController.logoStorage.value),
+                    width: 50,
+                    height: 50),
+          ),
+          Obx(() => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: companyDataController.name.value,
+                  ),
+                ),
               )),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: TextFormField(
-              controller: nameController,
-              decoration: InputDecoration(
-                border: const UnderlineInputBorder(),
-                labelText: companyDataController.name.value,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: TextFormField(
-              controller: addressController,
-              decoration: InputDecoration(
-                border: const UnderlineInputBorder(),
-                labelText: companyDataController.address.value,
-              ),
-            ),
-          ),
+          Obx(() => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: TextFormField(
+                  controller: addressController,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: companyDataController.address.value,
+                  ),
+                ),
+              )),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: TextFormField(
