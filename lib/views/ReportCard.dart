@@ -29,16 +29,27 @@ class _ReportCardState extends State<ReportCard> {
     print('pressed');
 
     try {
-      setState(() {
-        isPDFBeingCreated = true;
-      });
+      // Check if PDF already exist
+      final file =
+          File('${globalStateController.path}/${widget.report.userId}.pdf');
 
-      final pdf = await createPDF(widget.report);
-      bool res = await savePDF(pdf, widget.report.userId);
+      if (file.existsSync()) {
+        print('file exists');
+        OpenFile.open(
+            '${globalStateController.path}/${widget.report.userId}.pdf');
+      } else {
+        // Create file, if it doesn't exist
+        setState(() {
+          isPDFBeingCreated = true;
+        });
 
-      setState(() {
-        isPDFBeingCreated = false;
-      });
+        final pdf = await createPDF(widget.report);
+        bool res = await savePDF(pdf, widget.report.userId);
+
+        setState(() {
+          isPDFBeingCreated = false;
+        });
+      }
     } catch (err) {
       print(err);
     }
@@ -67,7 +78,7 @@ class _ReportCardState extends State<ReportCard> {
   Widget build(BuildContext context) {
     if (isPDFBeingCreated) {
       return Container(
-        height: 110,
+        height: 115,
         margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(15.0),
         decoration: const BoxDecoration(
@@ -80,7 +91,7 @@ class _ReportCardState extends State<ReportCard> {
     }
 
     return Container(
-        height: 110,
+        height: 115,
         margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(15.0),
         decoration: const BoxDecoration(
