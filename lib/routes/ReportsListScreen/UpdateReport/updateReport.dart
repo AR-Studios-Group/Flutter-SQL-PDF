@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/globalController.dart';
 import '../../../controllers/reportDBController.dart';
 import '../../../models/report.dart';
 
 class UpdateReport extends StatelessWidget {
   final ReportDBController reportDBController = Get.find();
+  final GlobalStateController globalStateController = Get.find();
   final Report report;
 
   UpdateReport({Key? key, required this.report}) : super(key: key);
@@ -15,7 +19,7 @@ class UpdateReport extends StatelessWidget {
   final phoneIDController = TextEditingController();
   final aliasController = TextEditingController();
 
-  void _handleReportUpdate() {
+  void _handleReportUpdate() async {
     String _deviceName = report.device_name;
     String _userID = report.userId;
     String _phoneID = report.phoneId;
@@ -46,6 +50,11 @@ class UpdateReport extends StatelessWidget {
     userIDController.text = '';
     phoneIDController.text = '';
     aliasController.text = '';
+
+    final file = File('${globalStateController.path}/${report.userId}.pdf');
+    List<int> bytes = await file.readAsBytes();
+
+    file.delete();
 
     reportDBController.readAll();
     Get.back();
