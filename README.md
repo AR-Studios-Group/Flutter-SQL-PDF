@@ -8,3 +8,5 @@
 4. pdf - Generating PDF
 5. open_file - View pdf
 6. image_picker - Use images that are in phone's gallery
+
+Needs to have an company logo, otherwise the PDF doesn't get created
