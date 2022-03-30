@@ -43,12 +43,14 @@ class ReportDBController extends GetxController {
           var date = r['create_date'].toString();
           var deviceName = r['device_name'].toString();
           var userID = r['userId'].toString();
-          var phoneID = r['phoneID'].toString();
+          var phoneID = r['phoneId'].toString();
           var alias = r['alias'].toString();
           var installationResult = r['installation_result'].toString();
 
-          reports.add(Report(
-              date, deviceName, userID, phoneID, alias, installationResult));
+          reports.insert(
+              0,
+              Report(date, deviceName, userID, phoneID, alias,
+                  installationResult));
         }
       }
     } catch (err) {
@@ -70,6 +72,16 @@ class ReportDBController extends GetxController {
       await db.delete(tableName,
           where: 'create_date = ?', whereArgs: [report.create_date]);
       reports.remove(report);
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> updateItem(Report report) async {
+    try {
+      int res = await db.update(tableName, report.toMap(),
+          where: 'create_date = ?', whereArgs: [report.create_date]);
+      print(res);
     } catch (err) {
       print(err);
     }

@@ -58,15 +58,10 @@ class CompanyDataController extends GetxController {
   }
 
   void initialFetch() {
-    var _name = readString('@name');
-    var _address = readString('@address');
-    var _logo = readString('@logo');
-    var _logo_photo = readString('@logo_photo');
-    print(_logo);
-    name.value = _name;
-    address.value = _address;
-    logo.value = _logo;
-    logoStorage.value = _logo_photo;
+    name.value = readString('@name');
+    address.value = readString('@address');
+    logo.value = readString('@logo');
+    logoStorage.value = readString('@logo_photo');
   }
 
   @override

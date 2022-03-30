@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/companyDataController.dart';
+import '../controllers/globalController.dart';
 import '../controllers/reportDBController.dart';
 import 'CompanySettings/companySettings.dart';
 import 'ReportsListScreen/reportsListScreen.dart';
@@ -16,6 +17,7 @@ class BottomTabNavigation extends StatefulWidget {
 class _BottomTabNavigationState extends State<BottomTabNavigation> {
   final companyDataController = Get.put(CompanyDataController());
   final reportDBController = Get.put(ReportDBController());
+  final globalStateController = Get.put(GlobalStateController());
 
   int _currentIndex = 0;
 

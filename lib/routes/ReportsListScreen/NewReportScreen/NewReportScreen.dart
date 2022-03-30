@@ -22,16 +22,15 @@ class NewReportScreen extends StatelessWidget {
       var alias = aliasController.text;
       var status = statusController.text;
 
-      var deviceName = 'iPhone'; // Get name later
-      var phoneID = 'phone ID'; // Get phoneID later
-
       var newReport =
-          Report(creationTime, deviceName, userID, phoneID, alias, status);
+          Report(creationTime, 'iPhone', userID, 'phone ID', alias, status);
       reportDBController.add(newReport);
 
       userIdController.text = '';
       aliasController.text = '';
       statusController.text = '';
+
+      Get.back();
     } catch (err) {
       print(err);
     }

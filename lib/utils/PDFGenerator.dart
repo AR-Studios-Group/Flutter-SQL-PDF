@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:open_file/open_file.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../controllers/companyDataController.dart';
+import '../controllers/globalController.dart';
 import '../models/report.dart';
 
 Future<Widget> Header() async {
@@ -14,11 +17,17 @@ Future<Widget> Header() async {
   final font = await PdfGoogleFonts.nunitoExtraLight();
 
   late ImageProvider logo;
+  if (companyDataController.logo.value == '') {
+    logo = MemoryImage(base64Decode(companyDataController.logoStorage.value));
+  } else {
+    logo = await networkImage(companyDataController.logo.value);
+  }
 
   return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        Image(logo, height: 50, width: 50),
         Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: Container()),
@@ -105,15 +114,16 @@ Future<Document> createPDF(Report report) async {
   return pdf;
 }
 
-Future<void> savePDF(Document pdf, String fileName) async {
+Future<bool> savePDF(Document pdf, String fileName) async {
+  final GlobalStateController globalStateController = Get.find();
   try {
-    print('PDF Saved');
     List<int> bytes = await pdf.save();
-    final path = (await getApplicationSupportDirectory()).path;
-    final file = File('$path/$fileName.pdf');
+    final file = File('${globalStateController.path}/$fileName.pdf');
     await file.writeAsBytes(bytes);
-    print('$path/$fileName.pdf');
+    OpenFile.open('${globalStateController.path}/$fileName.pdf');
+    return true;
   } catch (err) {
     print(err);
+    return false;
   }
 }
