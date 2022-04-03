@@ -26,8 +26,6 @@ class _ReportCardState extends State<ReportCard> {
   bool isPDFBeingCreated = false;
 
   void handlePDFCreation() async {
-    print('pressed');
-
     try {
       // Check if PDF already exist
       final file =
@@ -76,6 +74,7 @@ class _ReportCardState extends State<ReportCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Indicator, when the PDF button is pressed
     if (isPDFBeingCreated) {
       return Container(
         height: 115,

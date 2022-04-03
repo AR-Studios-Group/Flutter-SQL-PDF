@@ -70,7 +70,9 @@ class CompanySettings extends StatelessWidget {
                   controller: nameController,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
-                    labelText: companyDataController.name.value,
+                    labelText: companyDataController.name.value == ''
+                        ? "Company's Name"
+                        : companyDataController.name.value,
                   ),
                 ),
               )),
@@ -80,7 +82,9 @@ class CompanySettings extends StatelessWidget {
                   controller: addressController,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
-                    labelText: companyDataController.address.value,
+                    labelText: companyDataController.address.value == ''
+                        ? "Company's Address"
+                        : companyDataController.address.value,
                   ),
                 ),
               )),
